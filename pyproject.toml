@@ -1,0 +1,16 @@
+[tool.pylint.master]
+disable = [
+    "missing-module-docstring",
+    "too-few-public-methods",
+]
+
+[tool.pylint.format]
+good-names = ["fp", "ls"]
+max-line-length = 120
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=62",
+    "wheel"
+]

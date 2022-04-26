@@ -1,0 +1,74 @@
+name: Python
+
+on:
+  push:
+
+jobs:
+  Dependencies:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [ 3.9, "3.10" ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Cache the dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt -r requirements-dev.txt
+  Linting:
+    needs: [Dependencies]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [ 3.9, "3.10" ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Cache the dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt -r requirements-dev.txt
+      - name: Run Pylint
+        run: pylint ugent_food
+  Typing:
+    needs: [Dependencies]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [ 3.9, "3.10" ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Cache the dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt -r requirements-dev.txt
+      - name: Run Mypy
+        run: mypy ugent_food
