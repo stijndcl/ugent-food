@@ -1,12 +1,11 @@
 from datetime import datetime
 
-from .data.enums import Language
-from .i18n import Translator
+from .config import Config
 from .menu import menu_for
 
 
 def main(argv=None):
-    translator = Translator(Language.EN)
+    _config = Config.load()
 
     # print(argv)
-    menu_for(datetime.now(), translator)
+    menu_for(datetime.now(), _config)

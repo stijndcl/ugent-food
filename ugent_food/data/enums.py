@@ -38,4 +38,8 @@ class Language(Enum):
 class Message(Enum):
     """Enum for the messages that can be displayed in every language"""
     RESTO_CLOSED = auto()
+
+    # Types of meals
     SOUP = auto()
+    MAIN_COURSES = auto()
+    VEGETABLES = auto()
