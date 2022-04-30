@@ -26,12 +26,11 @@ def mode_menu(config: Config, data: CommandData):
     # Default to current day if nothing supplied
     day = data.date or datetime.now()
 
-    # response = requests.get(f"https://hydra.ugent.be/api/2.0/resto/menu/{config.translator.language.value}/{day.year}/{day.month}/{day.day}.json")
-    response = requests.get(f"https://hydra.ugent.be/api/2.0/resto/menu/{config.translator.language.value}/2022/4/29.json")
+    response = requests.get(f"https://hydra.ugent.be/api/2.0/resto/menu/{config.translator.language.value}/{day.year}/{day.month}/{day.day}.json")
 
     if response != HTTPStatus.OK:
         handle_request_error(response.status_code, day)
 
     response_json = response.json()
     menu = from_dict(data_class=DailyMenu, data=response_json)
-    menu.print_menu(config)
+    menu.print_menu(config, day)

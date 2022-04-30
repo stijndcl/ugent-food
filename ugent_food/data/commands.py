@@ -17,5 +17,5 @@ class Command:
     callable: Callable[[Config, CommandData], Any] = mode_menu
     data: CommandData = CommandData()
 
-    def __call__(self, *args, **kwargs):
-        self.callable(Config.load(), self.data)
+    def __call__(self, config: Config, *args, **kwargs):
+        self.callable(config, self.data)

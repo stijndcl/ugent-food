@@ -1,5 +1,6 @@
 import abc
 from dataclasses import field, dataclass
+from datetime import datetime
 from typing import Optional
 
 from tabulate import tabulate
@@ -33,7 +34,7 @@ class Menu(abc.ABC, MenuMixin):
     """Abstract class for menu's"""
 
     @abc.abstractmethod
-    def print_menu(self, config: Config):
+    def print_menu(self, config: Config, date: datetime):
         raise NotImplementedError
 
 
@@ -48,7 +49,7 @@ class DailyMenu(Menu):
         Kind.MEAT, Kind.FISH, Kind.VEGETARIAN, Kind.VEGAN, Kind.SOUP
     ])
 
-    def print_menu(self, config: Config):
+    def print_menu(self, config: Config, date: datetime):
         """Format & print the entire menu to console"""
         translator = config.translator
 
@@ -65,6 +66,7 @@ class DailyMenu(Menu):
                 table_data.append(list(meal))
 
         # TODO translations
+        print(f"Menu for {date.strftime('%d/%m/%Y')}:\n")
         print(tabulate(table_data, headers=["Type", "Kind", "Name", "Price"]))
 
         if self.vegetables:

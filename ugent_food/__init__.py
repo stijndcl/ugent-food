@@ -6,15 +6,17 @@ from .modes import Config
 
 
 def main(argv=None):
+    config = Config.load()
+
     if argv:
         # Parse the required command out of the argv
-        command = parse_args(argv)
+        command = parse_args(argv, config)
     else:
         # Use defaults
         command = Command()
 
+    # Unable to parse arguments
     if command is None:
-        print("Unable to parse arguments.", file=sys.stderr)
         exit(1)
 
-    command()
+    command(config)
