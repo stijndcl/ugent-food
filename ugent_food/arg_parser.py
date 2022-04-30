@@ -3,20 +3,18 @@ from datetime import datetime
 from typing import Optional
 
 from ugent_food.data.commands import Command, CommandData
-from ugent_food import modes
+from ugent_food.modes import mode_config, mode_menu
 
 
 __all__ = [
     "parse_args"
 ]
 
-from ugent_food.modes import mode_menu
-
 
 def _get_mode(name: str, argv: list[str]) -> Command:
     modes_mapping = {
         # Avoid circular import, also Config doesn't need itself as an argument
-        "config": lambda _, command: modes.mode_config(command.data.argv)
+        "config": lambda _, command: mode_config(command.data.argv)
     }
 
     if name not in modes_mapping:
@@ -88,8 +86,6 @@ def parse_args(argv: list[str]) -> Optional[Command]:
     if len(first_arg) < 2:
         print("Argument too short (length must be at least 2).", file=sys.stderr)
         return None
-
-    day_dt: Optional[datetime] = None
 
     # DD/MM format
     if "/" in first_arg:

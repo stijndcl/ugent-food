@@ -1,13 +1,19 @@
+from __future__ import annotations
+
 from datetime import datetime
 from http import HTTPStatus
+from typing import TYPE_CHECKING
 
 import requests
 from dacite import from_dict
 
 from ugent_food.modes.config import Config
-from ugent_food.data.commands import CommandData
 from ugent_food.data.entities import DailyMenu
 from ugent_food.exceptions import handle_request_error
+
+
+if TYPE_CHECKING:
+    from ugent_food.data.commands import CommandData
 
 
 __all__ = [
