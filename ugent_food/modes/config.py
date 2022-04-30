@@ -12,7 +12,8 @@ from ugent_food.data.enums import Language
 from ugent_food.i18n import Translator
 
 __all__ = [
-    "Config"
+    "Config",
+    "mode_config"
 ]
 
 
@@ -75,3 +76,8 @@ class Config:
             ])
 
         print(tabulate(field_data, headers=["Name", "Type", "Description", "Default value"], tablefmt=table_type))
+
+
+def mode_config(argv: list[str]):
+    print("Config mode")
+    pass

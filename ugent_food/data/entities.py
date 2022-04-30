@@ -4,7 +4,7 @@ from typing import Optional
 
 from tabulate import tabulate
 
-from ..config import Config
+from ..modes.config import Config
 from .enums import Kind, Type, Message
 
 
