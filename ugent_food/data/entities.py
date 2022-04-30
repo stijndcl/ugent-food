@@ -4,8 +4,8 @@ from typing import Optional
 
 from tabulate import tabulate
 
-from ugent_food import Config
-from ugent_food.data.enums import Kind, Type, Message
+from ..config import Config
+from .enums import Kind, Type, Message
 
 
 @dataclass
@@ -24,7 +24,12 @@ class Meal:
 
 
 @dataclass
-class Menu(abc.ABC):
+class MenuMixin:
+    """Mixin class to make Mypy happy"""
+    pass
+
+
+class Menu(abc.ABC, MenuMixin):
     """Abstract class for menu's"""
 
     @abc.abstractmethod
