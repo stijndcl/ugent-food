@@ -1,19 +1,30 @@
 from __future__ import annotations
 
 import json
-from dataclasses import field, dataclass
+from dataclasses import field, fields, dataclass
 from pathlib import Path
 from typing import Optional
 
 from dacite import from_dict
+from tabulate import tabulate
 
 from ugent_food.data.enums import Language
 from ugent_food.i18n import Translator
 
+__all__ = [
+    "Config"
+]
+
 
 @dataclass
 class Config:
-    language: str = "en"
+    language: str = field(default="en", metadata={
+        "description": "The language used to fetch the menus and the output of the tool."
+    })
+    skip_weekends: bool = field(default=True, metadata={
+        "description": "Whether to automatically skip weekends. "
+                       "Using the tool on a Saturday will show the menu for the coming Monday."
+    })
     _language: Optional[Language] = field(init=False, default=None)
     translator: Translator = field(init=False)
 
@@ -47,3 +58,20 @@ class Config:
 
         return from_dict(cls, content)
 
+    @classmethod
+    def ls(cls, table_type: str = "simple"):
+        """Print all configuration options (including descriptions)"""
+        field_data = []
+
+        for _field in sorted(fields(cls), key=lambda x: x.name):
+            if not _field.init:
+                continue
+
+            field_data.append([
+                _field.name,
+                _field.type,
+                _field.metadata["description"],
+                _field.default
+            ])
+
+        print(tabulate(field_data, headers=["Name", "Type", "Description", "Default value"], tablefmt=table_type))

@@ -41,5 +41,5 @@ class Message(Enum):
 
     # Types of meals
     SOUP = auto()
-    MAIN_COURSES = auto()
+    MAIN_COURSE = auto()
     VEGETABLES = auto()

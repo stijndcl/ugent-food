@@ -29,14 +29,6 @@ messages: dict[Message, dict[Language, str]] = {
         Language.EN: "The restaurants are closed on {day}.",
         Language.NL: "De resto's zijn gesloten op {day}."
     },
-    Message.SOUP: {
-        Language.EN: "Soup:\n{soup}",
-        Language.NL: "Soep:\n{soup}"
-    },
-    Message.MAIN_COURSES: {
-        Language.EN: "Main courses:\n{main}",
-        Language.NL: "Hoofdgerechten:\n{main}"
-    },
     Message.VEGETABLES: {
         Language.EN: "Vegetables:\n{vegetables}",
         Language.NL: "Groenten:\n{vegetables}"
