@@ -63,8 +63,8 @@ class DailyMenu(Menu):
         print(tabulate(table_data, headers=["Type", "Kind", "Name", "Price"]))
 
         if self.vegetables:
-            vegetables_str = "\n".join(map(lambda x: f"\t{x}", self.vegetables))
-            print("\n", translator.message(Message.VEGETABLES, vegetables=vegetables_str))
+            vegetables_str = "\n".join(map(lambda x: f"- {x}", self.vegetables))
+            print("\n" + translator.message(Message.VEGETABLES, vegetables=vegetables_str))
 
     def _get_meals_by_type(self, _type: Type) -> list[Meal]:
         """Get all meals of a given type"""
