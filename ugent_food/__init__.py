@@ -1,22 +1,24 @@
-from .arg_parser import parse_args
-from .arg_parser_rewrite import create_parser
-from .data.commands import Command
-from .modes import Config
+from typing import Callable
+
+from ugent_food.cli.arg_parser_rewrite import create_parser
+from .modes import Config, mode_config, mode_menu
 
 
 def main(argv=None):
-    # config = Config.load()
-    #
-    # if argv:
-    #     # Parse the required command out of the argv
-    #     command = parse_args(argv, config)
-    # else:
-    #     # Use defaults (menu for today)
-    #     command = Command()
-    #
-    # # Unable to parse arguments
-    # if command is None:
-    #     exit(1)
-    #
-    # command(config)
-    print(create_parser().parse_args(argv))
+    config = Config.load()
+
+    # Parse command line arguments
+    args_namespace = vars(create_parser().parse_args(argv))
+
+    # Set menu as the default subparser
+    if args_namespace.get("subparser", None) is None:
+        args_namespace["subparser"] = "menu"
+
+    # Link mode names to methods
+    modes_mapping: dict[str, Callable[[Config, dict], None]] = {
+        "config": mode_config,
+        "menu": mode_menu
+    }
+
+    # Run the requested mode
+    modes_mapping[args_namespace.get("subparser")](config, args_namespace)

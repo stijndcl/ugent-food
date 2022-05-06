@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import field, fields, dataclass
 from pathlib import Path
 from typing import Optional
@@ -17,14 +18,19 @@ __all__ = [
 ]
 
 
+# Path to the configuration file
+config_path = Path(f"{Path.home()}/.ugent_food")
+
+
 @dataclass
 class Config:
     language: str = field(default="en", metadata={
-        "description": "The language used to fetch the menus and the output of the tool."
+        "description": "The language used to fetch the menus in. "
+                       "Supported values are currently \"en\" (English) and \"nl\" (Dutch)."
     })
     skip_weekends: bool = field(default=True, metadata={
         "description": "Whether to automatically skip weekends. "
-                       "Using the tool on a Saturday will show the menu for the coming Monday."
+                       "For example: using the tool on a Saturday will show the menu for the coming Monday."
     })
     _language: Optional[Language] = field(init=False, default=None)
     translator: Translator = field(init=False)
@@ -49,7 +55,6 @@ class Config:
     def load(cls) -> Config:
         """Load configuration from the file"""
         # Create file if it doesn't exist
-        config_path = Path(f"{Path.home()}/.ugent_food")
         if not config_path.exists():
             with config_path.open("w+", encoding="utf-8") as fp:
                 json.dump({}, fp)
@@ -58,6 +63,26 @@ class Config:
             content = json.load(fp)
 
         return from_dict(cls, content)
+
+    @classmethod
+    def set(cls, name: str, value: str):
+        """Change a configuration"""
+        matched_field = None
+
+        for _field in sorted(fields(cls), key=lambda x: x.name):
+            if not _field.init:
+                continue
+
+            if _field.name == name:
+                matched_field = _field
+                break
+
+        # No field found with this name
+        if matched_field is None:
+            print(f"Unknown setting: {name}.", file=sys.stderr)
+            exit(1)
+
+        # TODO convert value to right type
 
     @classmethod
     def ls(cls, table_type: str = "simple"):
@@ -75,9 +100,18 @@ class Config:
                 _field.default
             ])
 
+        # TODO print configured value
         print(tabulate(field_data, headers=["Name", "Type", "Description", "Default value"], tablefmt=table_type))
 
 
-def mode_config(argv: list[str]):
-    print("Config mode")
-    pass
+def mode_config(config: Config, args: dict):
+    if args.get("subcommand") == "ls":
+        # Error if any extra arguments were passed
+        illegal_args = ["target", "value"]
+        illegal_args_passed = list(key for key in args.keys() if key in illegal_args and args[key] is not None)
+
+        if illegal_args_passed:
+            print(f"Unexpected arguments: {', '.join(illegal_args_passed)}", file=sys.stderr)
+            exit(2)
+
+        return Config.ls()

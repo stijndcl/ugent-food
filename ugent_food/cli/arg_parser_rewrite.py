@@ -6,6 +6,7 @@ __all__ = [
 ]
 
 import sys
+from dataclasses import dataclass
 from typing import Optional
 
 
@@ -44,6 +45,7 @@ class ArgParser(argparse.ArgumentParser):
                 super().error(str(exc))
 
     def error(self, message: str):
+        """Raise an exception instead of printing a message, so we can catch it if we want to"""
         exc = sys.exc_info()[1]
         if exc:
             raise exc
@@ -55,13 +57,14 @@ def create_parser() -> argparse.ArgumentParser:
     """Create the main argparser, including subparsers for different modules"""
     # Main parser
     parser = ArgParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, prog="ugent-food")
-    subparsers = parser.add_subparsers()
+    subparsers = parser.add_subparsers(dest="subparser")
 
     config_subparser = subparsers.add_parser("config", help="Configure the behaviour of the application.")
-    config_subparser.add_argument("action", help="The action to perform.", choices=["ls", "set"])
+    config_subparser.add_argument("subcommand", help="The subcommand to execute. ls prints out the current configuration, set allows modifying values.", choices=["ls", "set"])
+    config_subparser.add_argument("target", nargs="?", help="The name of the setting that should be changed. Only allowed when calling the 'set' mode.")
+    config_subparser.add_argument("value", nargs="?", help="The new value for the chosen setting. Only allowed when calling the 'set' mode.")
 
-    menu_subparser = subparsers.add_parser("menu", help="Commands related to fetching the menu.")
+    menu_subparser = subparsers.add_parser("menu", help="Commands related to fetching menus. Note that, as this is the most common use-case, it's not required to explicitly add this command. Immediately passing its arguments will work as well (eg. 'ugent_food [day]').")
     menu_subparser.add_argument("day", nargs="?", help="The day for which to fetch the menu. Defaults to today's menu. This can either be a weekday (eg. 'monday', 'tuesday', ...), a date in DD/MM format (eg. 21/09), or a relative offset (eg. 'tomorrow').")
-    menu_subparser.add_argument("-S", "--sandwiches", action="store_true", help="Show the available sandwiches instead of the usual meals.")
 
     return parser
