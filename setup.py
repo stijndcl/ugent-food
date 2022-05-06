@@ -8,13 +8,28 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 
 def read_requirements() -> list[str]:
-    with open("requirements.txt") as f:
+    with open(here / "requirements.txt") as f:
         return f.read().splitlines()
+
+
+def read_dev_requirements() -> list[str]:
+    with open(here / "requirements-dev.txt") as f:
+        return f.read().splitlines()
+
+
+def get_version() -> str:
+    with open(here / "src/ugent_food/__version__.py") as f:
+        for line in f:
+            if line.startswith('__version__'):
+                delim = '"' if '"' in line else "'"
+                return line.split(delim)[1]
+
+    raise RuntimeError("Unable to find version string.")
 
 
 setup(
     name="ugent-food",
-    version="0.1.0",
+    version=get_version(),
     description="Utility package to validate values based on type annotations",
     url="https://github.com/stijndcl/ugent-food",
     license="MIT",
@@ -37,6 +52,9 @@ setup(
     packages=find_packages(include=["type_validators"]),
     python_requires=">=3.9",
     install_requires=read_requirements(),
+    extras_require={
+        "dev": read_dev_requirements()
+    },
     project_urls={
         "Bug Reports": "https://github.com/stijndcl/ugent-food/issues",
         "Source": "https://github.com/stijndcl/ugent-food",

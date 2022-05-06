@@ -24,7 +24,9 @@ def _get_mode(name: str, argv: list[str]) -> Command:
 
 
 def _parse_weekday(argument: str, language: Language) -> Optional[datetime]:
-    """Parse a specific weekday"""
+    """Parse a specific day of the week
+    As the restaurants are closed during the weekends, only monday-friday is supported
+    """
     # Specific day of the week, supports EN & NL
     date_args = {
         Language.EN: {

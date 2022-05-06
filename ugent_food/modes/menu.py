@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 import requests
 from dacite import from_dict
 
+from ugent_food.data.utils import headers
 from ugent_food.modes.config import Config
 from ugent_food.data.entities import DailyMenu
 from ugent_food.exceptions import handle_request_error
@@ -26,7 +27,7 @@ def mode_menu(config: Config, data: CommandData):
     # Default to current day if nothing supplied
     day = data.date or datetime.now()
 
-    response = requests.get(f"https://hydra.ugent.be/api/2.0/resto/menu/{config.translator.language.value}/{day.year}/{day.month}/{day.day}.json")
+    response = requests.get(f"https://hydra.ugent.be/api/2.0/resto/menu/{config.translator.language.value}/{day.year}/{day.month}/{day.day}.json", headers=headers)
 
     if response != HTTPStatus.OK:
         handle_request_error(response.status_code, day)

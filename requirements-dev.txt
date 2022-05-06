@@ -1,5 +1,4 @@
 coverage==6.3.2
-flake8==4.0.1
 mypy==0.942
 pylint==2.13.7
 pylint-pytest==1.1.2
