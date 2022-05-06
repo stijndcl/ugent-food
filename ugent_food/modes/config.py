@@ -22,11 +22,25 @@ __all__ = [
 config_path = Path(f"{Path.home()}/.ugent_food")
 
 
+def ensure_config_file():
+    """Make an empty config file if there's none present."""
+    if not config_path.exists():
+        with config_path.open("w+", encoding="utf-8") as fp:
+            json.dump({}, fp)
+
+
+def load_config_file() -> dict:
+    """Load an existing config file"""
+    with config_path.open("r", encoding="utf-8") as fp:
+        return json.load(fp)
+
+
 @dataclass
 class Config:
     language: str = field(default="en", metadata={
         "description": "The language used to fetch the menus in. "
-                       "Supported values are currently \"en\" (English) and \"nl\" (Dutch)."
+                       "Supported values are currently \"en\" (English) and \"nl\" (Dutch).",
+        "allowed": ["en", "nl"]
     })
     skip_weekends: bool = field(default=True, metadata={
         "description": "Whether to automatically skip weekends. "
@@ -55,12 +69,8 @@ class Config:
     def load(cls) -> Config:
         """Load configuration from the file"""
         # Create file if it doesn't exist
-        if not config_path.exists():
-            with config_path.open("w+", encoding="utf-8") as fp:
-                json.dump({}, fp)
-
-        with open(config_path, "r+") as fp:
-            content = json.load(fp)
+        ensure_config_file()
+        content = load_config_file()
 
         return from_dict(cls, content)
 
@@ -82,14 +92,26 @@ class Config:
             print(f"Unknown setting: {name}.", file=sys.stderr)
             exit(1)
 
-        # TODO convert value to right type
+        # TODO convert value to right type & check value
 
-    @classmethod
-    def ls(cls, table_type: str = "simple"):
+        if (allowed_values := matched_field.metadata.get("allowed", None)) is not None:
+            if value not in allowed_values:
+                print(f"Illegal value for setting {name}: {value}.\nAccepted values are: {', '.join(allowed_values)}.", file=sys.stderr)
+                exit(2)
+
+        # Change the setting & dump it back into the file
+        with config_path.open("r", encoding="utf-8") as fp:
+            content = json.load(fp)
+
+        with config_path.open("w", encoding="utf-8") as fp:
+            content[name] = value
+            json.dump(content, fp)
+
+    def ls(self, table_type: str = "simple"):
         """Print all configuration options (including descriptions)"""
         field_data = []
 
-        for _field in sorted(fields(cls), key=lambda x: x.name):
+        for _field in sorted(fields(self), key=lambda x: x.name):
             if not _field.init:
                 continue
 
@@ -97,11 +119,12 @@ class Config:
                 _field.name,
                 _field.type,
                 _field.metadata["description"],
-                _field.default
+                _field.default,
+                self.__getattribute__(_field.name)
             ])
 
         # TODO print configured value
-        print(tabulate(field_data, headers=["Name", "Type", "Description", "Default value"], tablefmt=table_type))
+        print(tabulate(field_data, headers=["Name", "Type", "Description", "Default value", "Value"], tablefmt=table_type))
 
 
 def mode_config(config: Config, args: dict):
@@ -112,6 +135,17 @@ def mode_config(config: Config, args: dict):
 
         if illegal_args_passed:
             print(f"Unexpected arguments: {', '.join(illegal_args_passed)}", file=sys.stderr)
-            exit(2)
+            exit(3)
 
-        return Config.ls()
+        return config.ls()
+
+    if args.get("subcommand") == "set":
+        required_args = ["target", "value"]
+
+        # Check if all required args are present
+        for arg in required_args:
+            if args.get(arg, None) is None:
+                print(f"Missing argument: {arg}.", file=sys.stderr)
+                exit(4)
+
+        return Config.set(args["target"], args["value"])

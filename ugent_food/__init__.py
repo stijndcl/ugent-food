@@ -1,6 +1,6 @@
 from typing import Callable
 
-from ugent_food.cli.arg_parser_rewrite import create_parser
+from ugent_food.cli.arg_parser import create_parser
 from .modes import Config, mode_config, mode_menu
 
 
