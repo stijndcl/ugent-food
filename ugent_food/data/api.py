@@ -20,7 +20,8 @@ headers = {
 
 def get_menu(day: datetime, language: Language) -> DailyMenu:
     """Get the menu for a given day"""
-    response = requests.get(f"https://hydra.ugent.be/api/2.0/resto/menu/{language.value}/{day.year}/{day.month}/{day.day}.json", headers=headers)
+    url = f"https://hydra.ugent.be/api/2.0/resto/menu/{language.value}/{day.year}/{day.month}/{day.day}.json"
+    response = requests.get(url, headers=headers)
 
     # Something went wrong, raise an exception
     if response != HTTPStatus.OK:
