@@ -56,7 +56,8 @@ class DailyMenu(Menu):
         table_data = []
 
         if not self.open:
-            return translator.message(Message.RESTO_CLOSED)
+            print(translator.message(Message.RESTO_CLOSED))
+            exit(0)
 
         # Group by type
         for _type in [Type.MAIN, Type.SIDE, Type.COLD]:
@@ -65,8 +66,9 @@ class DailyMenu(Menu):
             for meal in meals:
                 table_data.append(list(meal))
 
-        # TODO translations
-        print(f"Menu for {date.strftime('%d/%m/%Y')}:\n")
+        weekday = translator.weekday(date.weekday())
+        day = date.strftime('%d/%m/%Y')
+        print(translator.message(Message.MENU_FOR, day=day, weekday=weekday) + "\n")
         print(tabulate(table_data, headers=["Type", "Kind", "Name", "Price"]))
 
         if self.vegetables:

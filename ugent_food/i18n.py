@@ -29,9 +29,45 @@ messages: dict[Message, dict[Language, str]] = {
         Language.EN: "The restaurants are closed on {day}.",
         Language.NL: "De resto's zijn gesloten op {day}."
     },
+    Message.MENU_FOR: {
+        Language.EN: "Menu for {weekday} {day}:",
+        Language.NL: "Menu voor {weekday} {day}:"
+    },
     Message.VEGETABLES: {
         Language.EN: "Vegetables:\n{vegetables}",
         Language.NL: "Groenten:\n{vegetables}"
+    }
+}
+
+
+weekdays: dict[int, dict[Language, str]] = {
+    0: {
+        Language.EN: "Monday",
+        Language.NL: "maandag"
+    },
+    1: {
+        Language.EN: "Tuesday",
+        Language.NL: "dinsdag"
+    },
+    2: {
+        Language.EN: "Wednesday",
+        Language.NL: "woensdag"
+    },
+    3: {
+        Language.EN: "Thursday",
+        Language.NL: "donderdag"
+    },
+    4: {
+        Language.EN: "Friday",
+        Language.NL: "vrijdag"
+    },
+    5: {
+        Language.EN: "Saturday",
+        Language.NL: "zaterdag"
+    },
+    6: {
+        Language.EN: "Sunday",
+        Language.NL: "zondag"
     }
 }
 
@@ -50,3 +86,7 @@ class Translator:
     def message(self, message: Message, **kwargs) -> str:
         """Get a specific message in the configured language"""
         return messages[message][self.language].format(**kwargs)
+
+    def weekday(self, weekday: int) -> str:
+        """Get a day of the week in a configured language"""
+        return weekdays[weekday][self.language]

@@ -68,6 +68,6 @@ def create_parser() -> argparse.ArgumentParser:
     config_subparser.add_argument("value", type=str.lower, nargs="?", help="The new value for the chosen setting. Only allowed when calling the 'set' subcommand.")
 
     menu_subparser = subparsers.add_parser("menu", help="Commands related to fetching menus. Note that, as this is the most common use-case, it's not required to explicitly add this command. Immediately passing its arguments will work as well (eg. 'ugent_food [day]').")
-    menu_subparser.add_argument("day", type=str.lower, nargs="?", help="The day for which to fetch the menu. Defaults to today's menu. This can either be a weekday (eg. 'monday', 'tuesday', ...), a date in DD/MM format (eg. 21/09), or a relative offset (eg. 'tomorrow').")
+    menu_subparser.add_argument("day", type=str.lower, nargs="?", help="The day for which to fetch the menu. Defaults to today's menu. This can either be a weekday (eg. 'Monday', 'Tuesday', ...), a date in DD/MM format (eg. 21/09), or a relative offset (eg. 'tomorrow').")
 
     return parser

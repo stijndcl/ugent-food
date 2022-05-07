@@ -2,11 +2,13 @@ from typing import Callable
 
 from .cli.arg_parser import create_parser
 from .data import api
+from .data.enums import Language
 from .modes.config import Config, mode_config
 from .modes.menu import mode_menu
 
 __all__ = [
-    "api"
+    "api",
+    "Language"
 ]
 
 

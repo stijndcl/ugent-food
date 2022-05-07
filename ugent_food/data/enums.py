@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from enum import Enum, auto
 
-from ugent_food.exceptions import UnsupportedLanguageException
-
 
 class Kind(Enum):
     FISH = "fish"
@@ -32,12 +30,13 @@ class Language(Enum):
             if key.value == language:
                 return key
 
-        raise UnsupportedLanguageException(language)
+        raise ValueError(f"Unsupported language: \"language\".")
 
 
 class Message(Enum):
     """Enum for the messages that can be displayed in every language"""
     RESTO_CLOSED = auto()
+    MENU_FOR = auto()
 
     # Types of meals
     SOUP = auto()

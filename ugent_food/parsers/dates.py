@@ -14,7 +14,7 @@ __all__ = [
 
 def parse_weekday(argument: str) -> Optional[datetime]:
     """Parse a specific day of the week
-    As the restaurants are closed during the weekends, only monday-friday is supported
+    As the restaurants are closed during the weekends, only Monday-Friday are supported
     """
     # Specific day of the week, supports EN & NL
     weekdays = {
