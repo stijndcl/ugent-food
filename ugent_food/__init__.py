@@ -1,7 +1,13 @@
 from typing import Callable
 
-from ugent_food.cli.arg_parser import create_parser
-from .modes import Config, mode_config, mode_menu
+from .cli.arg_parser import create_parser
+from .data import api
+from .modes.config import Config, mode_config
+from .modes.menu import mode_menu
+
+__all__ = [
+    "api"
+]
 
 
 def main(argv=None):

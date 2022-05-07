@@ -9,6 +9,7 @@ from typing import Optional
 from dacite import from_dict
 from tabulate import tabulate
 
+from ugent_food.cli.converters import cast_to_type
 from ugent_food.data.enums import Language
 from ugent_food.i18n import Translator
 
@@ -43,8 +44,10 @@ class Config:
         "allowed": ["en", "nl"]
     })
     skip_weekends: bool = field(default=True, metadata={
-        "description": "Whether to automatically skip weekends. "
-                       "For example: using the tool on a Saturday will show the menu for the coming Monday."
+        "description": "Whether to automatically skip weekends when fetching menus. "
+                       "This defaults to true because the restaurants aren't usually open during weekends. "
+                       "For example: using the tool on a Saturday will show the menu for the coming Monday.",
+        "allowed": [True, False]
     })
     _language: Optional[Language] = field(init=False, default=None)
     translator: Translator = field(init=False)
@@ -92,11 +95,14 @@ class Config:
             print(f"Unknown setting: {name}.", file=sys.stderr)
             exit(1)
 
-        # TODO convert value to right type & check value
+        cast_value = cast_to_type(matched_field.type, value)
 
-        if (allowed_values := matched_field.metadata.get("allowed", None)) is not None:
-            if value not in allowed_values:
-                print(f"Illegal value for setting {name}: {value}.\nAccepted values are: {', '.join(allowed_values)}.", file=sys.stderr)
+        if cast_value is None:
+            allowed_values = matched_field.metadata.get("allowed", [])
+
+            if cast_value not in allowed_values:
+                allowed_values_str = list(map(str, allowed_values))
+                print(f"Illegal value for setting \"{name}\": \"{value}\".\nAccepted values are: {', '.join(allowed_values_str)}.", file=sys.stderr)
                 exit(2)
 
         # Change the setting & dump it back into the file
@@ -104,7 +110,7 @@ class Config:
             content = json.load(fp)
 
         with config_path.open("w", encoding="utf-8") as fp:
-            content[name] = value
+            content[name] = cast_value
             json.dump(content, fp)
 
     def ls(self, table_type: str = "simple"):
@@ -123,7 +129,6 @@ class Config:
                 self.__getattribute__(_field.name)
             ])
 
-        # TODO print configured value
         print(tabulate(field_data, headers=["Name", "Type", "Description", "Default value", "Value"], tablefmt=table_type))
 
 

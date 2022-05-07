@@ -1,30 +1,33 @@
-from datetime import datetime
-from http import HTTPStatus
+from argparse import Namespace
+from datetime import datetime, timedelta
+from typing import Optional
 
-import requests
-from dacite import from_dict
-
-from ugent_food.data.utils import headers
+from ugent_food.data.api import get_menu
 from ugent_food.modes.config import Config
-from ugent_food.data.entities import DailyMenu
-from ugent_food.exceptions import handle_request_error
-
+from ugent_food.parsers.dates import parse_date
 
 __all__ = [
     "mode_menu"
 ]
 
 
-def mode_menu(config: Config, args: dict):
+def mode_menu(config: Config, args: Namespace):
     """Print the menu for a given date"""
-    # Default to current day if nothing supplied
-    day = args.get("day", None) or datetime.now()
+    day: Optional[str] = args.get("day", None)
+    day_dt: datetime
 
-    response = requests.get(f"https://hydra.ugent.be/api/2.0/resto/menu/{config.translator.language.value}/{day.year}/{day.month}/{day.day}.json", headers=headers)
+    if day is None:
+        # Default to current day if nothing supplied
+        day_dt = datetime.now()
+    else:
+        # Try parsing the requested date out of the argument
+        day_dt = parse_date(day)
 
-    if response != HTTPStatus.OK:
-        handle_request_error(response.status_code, day)
+    # If the current day is a weekend, and the user doesn't want to see weekends,
+    # skip it
+    if config.skip_weekends:
+        while day_dt.weekday() > 4:
+            day_dt += timedelta(1)
 
-    response_json = response.json()
-    menu = from_dict(data_class=DailyMenu, data=response_json)
-    menu.print_menu(config, day)
+    menu = get_menu(day_dt, config.translator.language)
+    menu.print_menu(config, day_dt)
