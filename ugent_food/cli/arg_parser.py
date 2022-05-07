@@ -38,7 +38,7 @@ class ArgParser(argparse.ArgumentParser):
                 try:
                     # Try parsing the args again, but now with "menu" as the first option
                     return super().parse_args(args)
-                except argparse.ArgumentError as new_exc:
+                except argparse.ArgumentError:
                     # That wasn't it either, print the ORIGINAL (!) exception out
                     super().error(str(exc))
             else:
