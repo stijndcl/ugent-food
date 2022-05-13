@@ -53,7 +53,7 @@ $ food
 ```
 
 For convenience, passing this command is **optional**. You can immediately pass a day (or subcommand) instead of having
-to add explicitly this as well. The above line is equivalent to
+to explicitly add this as well. The above line is equivalent to
 
 ```sh
 $ food menu
