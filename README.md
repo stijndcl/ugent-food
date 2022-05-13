@@ -70,6 +70,14 @@ $ food tomorrow
 $ food 21/09
 ```
 
+#### Options
+
+**Flags**:
+
+| Name (short) | Name (long)    | Description                                                                                                       | Default value |
+|--------------|----------------|-------------------------------------------------------------------------------------------------------------------|---------------|
+| `-b`, `-B`   | `--sandwiches` | List all available sandwiches instead of the menu for today. If the `[day]` argument is not empty, it is ignored. | `False`       |
+
 ### Configuration
 
 The tool has a couple of settings that you can configure using the `set` subcommand:
