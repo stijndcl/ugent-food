@@ -33,7 +33,7 @@ class SandwichMenu(Menu):
         """Sort sandwiches by name"""
         self.sandwiches.sort(key=lambda x: x.name)
 
-    def print_menu(self, config: Config, *args):
+    def print_menu(self, config: Config, *_):
         data = []
 
         for sandwich in self.sandwiches:
