@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from tabulate import tabulate
 
 from ugent_food.data.entities.abc import Menu
+from ugent_food.data.enums import Table
+from ugent_food.modes.config import Config
 
 
 @dataclass
@@ -31,7 +33,7 @@ class SandwichMenu(Menu):
         """Sort sandwiches by name"""
         self.sandwiches.sort(key=lambda x: x.name)
 
-    def print_menu(self, *args):
+    def print_menu(self, config: Config, *args):
         data = []
 
         for sandwich in self.sandwiches:
@@ -42,4 +44,4 @@ class SandwichMenu(Menu):
                 sandwich.price_medium
             ])
 
-        print(tabulate(data, headers=["Name", "Ingredients", "Price (small)", "Price (Medium)"]))
+        print(tabulate(data, headers=config.translator.table_headers(Table.SANDWICHES)))

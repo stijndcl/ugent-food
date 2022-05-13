@@ -74,9 +74,9 @@ $ food 21/09
 
 **Flags**:
 
-| Name (short) | Name (long)    | Description                                                                                                       | Default value |
-|--------------|----------------|-------------------------------------------------------------------------------------------------------------------|---------------|
-| `-b`, `-B`   | `--sandwiches` | List all available sandwiches instead of the menu for today. If the `[day]` argument is not empty, it is ignored. | `False`       |
+| Name (short) | Name (long)    | Description                                                                                                                                                       | Default value |
+|--------------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| `-b`, `-B`   | `--sandwiches` | List all available sandwiches instead of the menu for today. If the `[day]` argument is not empty, it is ignored. Note: this endpoint is only available in Dutch. | `False`       |
 
 ### Configuration
 

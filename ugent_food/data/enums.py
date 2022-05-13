@@ -52,6 +52,12 @@ class Language(Enum):
         raise ValueError(f"Unsupported language: \"{language}\".")
 
 
+class Table(Enum):
+    """Enum for a type of table printed using tabular"""
+    DAILYMENU = auto()
+    SANDWICHES = auto()
+
+
 class Message(Enum):
     """Enum for the messages that can be displayed in every language"""
     RESTO_CLOSED = auto()

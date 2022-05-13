@@ -12,6 +12,7 @@ from ..version import __version__
 
 __all__ = [
     "get_menu",
+    "get_sandwiches"
 ]
 
 headers = {

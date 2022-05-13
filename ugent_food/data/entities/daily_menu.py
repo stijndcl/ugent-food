@@ -7,7 +7,7 @@ from tabulate import tabulate
 
 from ugent_food.modes.config import Config
 from ugent_food.data.entities.abc import Menu
-from ugent_food.data.enums import Kind, Message, Type
+from ugent_food.data.enums import Kind, Message, Type, Table
 
 
 @dataclass
@@ -58,7 +58,7 @@ class DailyMenu(Menu):
         weekday = translator.weekday(date.weekday())
         day = date.strftime('%d/%m/%Y')
         print(translator.message(Message.MENU_FOR, day=day, weekday=weekday) + "\n")
-        print(tabulate(table_data, headers=["Type", "Kind", "Name", "Price"]))
+        print(tabulate(table_data, headers=config.translator.table_headers(Table.DAILYMENU)))
 
         if self.vegetables:
             vegetables_str = "\n".join(map(lambda x: f"- {x}", self.vegetables))

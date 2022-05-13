@@ -1,4 +1,4 @@
-from ugent_food.data.enums import Message, Language, Kind, Type
+from ugent_food.data.enums import Message, Language, Kind, Type, Table
 
 kinds: dict[Kind, dict[Language, str]] = {
     Kind.FISH: {
@@ -56,6 +56,18 @@ messages: dict[Message, dict[Language, str]] = {
 }
 
 
+table_headers: dict[Table, dict[Language, list[str]]] = {
+    Table.DAILYMENU: {
+        Language.EN: ["Type", "Kind", "Name", "Price"],
+        Language.NL: ["Type", "Soort", "Naam", "Prijs"]
+    },
+    Table.SANDWICHES: {
+        Language.EN: ["Name", "Ingredients", "Price (small)", "Price (medium)"],
+        Language.NL: ["Naam", "Ingrediënten", "Prijs (klein)", "Prijs (medium)"]
+    }
+}
+
+
 weekdays: dict[int, dict[Language, str]] = {
     0: {
         Language.EN: "Monday",
@@ -94,6 +106,10 @@ class Translator:
 
     def __init__(self, language: Language):
         self.language = language
+
+    def table_headers(self, table: Table):
+        """Translate the headers for a table"""
+        return table_headers[table][self.language]
 
     def kind(self, kind: Kind) -> str:
         """Get a translation for a meal kind in the configured language"""
