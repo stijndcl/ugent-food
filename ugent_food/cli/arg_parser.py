@@ -89,7 +89,7 @@ def create_parser() -> argparse.ArgumentParser:
                                      "Defaults to today's menu. "
                                      "This can either be a weekday (eg. 'Monday', 'Tuesday', ...), "
                                      "a date in DD/MM format (eg. 21/09), or a relative offset (eg. 'tomorrow').")
-    menu_subparser.add_argument("-b", "-B", "--sandwiches", action="store_true",
+    menu_subparser.add_argument("-s", "-S", "--sandwiches", action="store_true",
                                 help="List the available sandwiches instead of the menu. "
                                      "If a weekday is passed in the [day] argument, it is ignored. "
                                      "Note: this endpoint is only available in Dutch.")
