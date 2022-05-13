@@ -1,13 +1,13 @@
-import abc
 import sys
-from dataclasses import field, dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
 
 from tabulate import tabulate
 
-from ..modes.config import Config
-from .enums import Kind, Type, Message
+from ugent_food.modes.config import Config
+from ugent_food.data.entities.abc import Menu
+from ugent_food.data.enums import Kind, Message, Type
 
 
 @dataclass
@@ -17,22 +17,6 @@ class Meal:
     kind: str
     price: str
     type: str
-
-
-@dataclass
-class MenuMixin:
-    """Mixin class to make Mypy happy"""
-
-
-class Menu(abc.ABC, MenuMixin):
-    """Abstract class for menu's"""
-
-    @abc.abstractmethod
-    def print_menu(self, config: Config, date: datetime):
-        """Abstract method that all Menu's should implement
-        Print the menu to the terminal
-        """
-        raise NotImplementedError
 
 
 @dataclass

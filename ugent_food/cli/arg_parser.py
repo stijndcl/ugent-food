@@ -69,25 +69,29 @@ def create_parser() -> argparse.ArgumentParser:
     config_subparser.add_argument("subcommand", type=str.lower,
                                   help="The subcommand to execute. ls prints out the current configuration, "
                                        "set allows modifying values. "
-                                       "When calling 'set', the 'target' and 'value' arguments are required.",
+                                       "When calling [set], the [target] and [value] arguments are required.",
                                   choices=["ls", "set"])
     config_subparser.add_argument("target", type=str.lower, nargs="?",
                                   help="The name of the setting that should be changed. "
-                                       "Only allowed when calling the 'set' subcommand.")
+                                       "Only allowed when calling the [set] subcommand.")
     config_subparser.add_argument("value", type=str.lower, nargs="?",
                                   help="The new value for the chosen setting. "
-                                       "Only allowed when calling the 'set' subcommand.")
+                                       "Only allowed when calling the [set] subcommand.")
 
     menu_subparser = subparsers.add_parser("menu",
                                            help="Commands related to fetching menus. "
                                                 "Note that, as this is the most common use-case, "
-                                                "it's not required to explicitly add this command. "
-                                                "Immediately passing its arguments will work as well "
+                                                "it's not required to explicitly add this command, "
+                                                "and immediately passing its arguments will work as well "
                                                 "(eg. 'ugent_food [day]').")
     menu_subparser.add_argument("day", type=str.lower, nargs="?",
                                 help="The day for which to fetch the menu. "
                                      "Defaults to today's menu. "
                                      "This can either be a weekday (eg. 'Monday', 'Tuesday', ...), "
                                      "a date in DD/MM format (eg. 21/09), or a relative offset (eg. 'tomorrow').")
+    menu_subparser.add_argument("-b", "-B", "--sandwiches", action="store_true",
+                                help="List the available sandwiches instead of the menu. "
+                                     "If a weekday is passed in the [day] argument, it is ignored. "
+                                     "Note: this endpoint is only available in Dutch.")
 
     return parser

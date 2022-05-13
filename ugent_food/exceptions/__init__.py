@@ -1,2 +1,4 @@
 from .handlers import handle_request_error
 from .no_menu_found import NoMenuFoundException
+from .internal_server_error import InternalServerError
+from .ugent_food_exception import UgentFoodException
