@@ -2,6 +2,7 @@ import argparse
 import sys
 from typing import Optional
 
+from ugent_food.exceptions import ArgumentParsingException
 from ugent_food.version import __version__
 
 __all__ = [
@@ -27,10 +28,12 @@ class ArgParser(argparse.ArgumentParser):
 
         try:
             return super().parse_args(args, namespace)
-        except argparse.ArgumentError as exc:
+        except ArgumentParsingException as exc:
             # Error caused by choosing an incorrect mode, which could be
             # passing a day instead of "menu"
-            if str(exc).startswith(("invalid choice: ", "unrecognized arguments: ", "argument subparser: ")):
+            if str(exc).startswith(
+                    ("invalid choice: ", "argument subparser: ", "unrecognized arguments: ", "argument subparser: ")
+            ):
                 # Default to the "menu" option
                 args = ["menu"] + list(args)
 
@@ -39,7 +42,7 @@ class ArgParser(argparse.ArgumentParser):
                 try:
                     # Try parsing the args again, but now with "menu" as the first option
                     return super().parse_args(args, namespace)
-                except argparse.ArgumentError:
+                except argparse.ArgumentError as e:
                     # That wasn't it either, print the ORIGINAL (!) exception out
                     super().error(str(exc))
             else:
@@ -50,10 +53,7 @@ class ArgParser(argparse.ArgumentParser):
     def error(self, message: str):
         """Raise an exception instead of printing a message, so we can catch it if we want to"""
         exc = sys.exc_info()[1]
-        if exc:
-            raise exc
-
-        super().error(message)
+        raise ArgumentParsingException(str(exc) if exc else message)
 
 
 def create_parser() -> argparse.ArgumentParser:
