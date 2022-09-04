@@ -46,8 +46,8 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip3 install -r requirements.txt -r requirements-dev.txt
-      - name: Run Pylint
-        run: pylint ugent_food
+      - name: Run Flake8
+        run: flake8
   Typing:
     needs: [Dependencies]
     runs-on: ubuntu-latest
