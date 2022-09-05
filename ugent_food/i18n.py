@@ -26,6 +26,7 @@ class Language(Enum):
 class Message(Enum):
     """Enum for messages that can be displayed in multiple languages"""
 
+    EXTRA_MESSAGE = auto()
     MENU_FOR = auto()
     RESTO_CLOSED = auto()
 
@@ -35,28 +36,32 @@ class Message(Enum):
 
 
 kinds: dict[MealKind, dict[Language, str]] = {
-    MealKind.FISH: {Language.ENGLISH: "Fish", Language.DUTCH: "Vis"},
-    MealKind.MEAT: {Language.ENGLISH: "Meat", Language.DUTCH: "Vlees"},
-    MealKind.SOUP: {Language.ENGLISH: "Soup", Language.DUTCH: "Soep"},
-    MealKind.VEGAN: {Language.ENGLISH: "Vegan", Language.DUTCH: "Vegan"},
-    MealKind.VEGETARIAN: {Language.ENGLISH: "Vegetarian", Language.DUTCH: "Vegetarisch"},
+    MealKind.FISH: {Language.DUTCH: "Vis", Language.ENGLISH: "Fish"},
+    MealKind.MEAT: {Language.DUTCH: "Vlees", Language.ENGLISH: "Meat"},
+    MealKind.SOUP: {Language.DUTCH: "Soep", Language.ENGLISH: "Soup"},
+    MealKind.VEGAN: {Language.DUTCH: "Vegan", Language.ENGLISH: "Vegan"},
+    MealKind.VEGETARIAN: {Language.DUTCH: "Vegetarisch", Language.ENGLISH: "Vegetarian"},
 }
 
 
 types: dict[MealType, dict[Language, str]] = {
-    MealType.MAIN: {Language.ENGLISH: "Main course", Language.DUTCH: "Hoofdgerecht"},
-    MealType.COLD: {Language.ENGLISH: "Cold", Language.DUTCH: "Koud"},
-    MealType.SIDE: {Language.ENGLISH: "Side dish", Language.DUTCH: "Bijgerecht"},
+    MealType.MAIN: {Language.DUTCH: "Hoofdgerecht", Language.ENGLISH: "Main course"},
+    MealType.COLD: {Language.DUTCH: "Koud", Language.ENGLISH: "Cold"},
+    MealType.SIDE: {Language.DUTCH: "Bijgerecht", Language.ENGLISH: "Side dish"},
 }
 
 
 messages: dict[Message, dict[Language, str]] = {
-    Message.RESTO_CLOSED: {
-        Language.ENGLISH: "The restaurants are closed on {day}.",
-        Language.DUTCH: "De resto's zijn gesloten op {day}.",
+    Message.EXTRA_MESSAGE: {
+        Language.DUTCH: "Extra mededeling:\n{extra}",
+        Language.ENGLISH: "Extra message:\n{extra}",
     },
-    Message.MENU_FOR: {Language.ENGLISH: "Menu for {weekday} {day}:", Language.DUTCH: "Menu voor {weekday} {day}:"},
-    Message.VEGETABLES: {Language.ENGLISH: "Vegetables:\n{vegetables}", Language.DUTCH: "Groenten:\n{vegetables}"},
+    Message.RESTO_CLOSED: {
+        Language.DUTCH: "De resto's zijn gesloten op {day}.",
+        Language.ENGLISH: "The restaurants are closed on {day}.",
+    },
+    Message.MENU_FOR: {Language.DUTCH: "Menu voor {weekday} {day}:", Language.ENGLISH: "Menu for {weekday} {day}:"},
+    Message.VEGETABLES: {Language.DUTCH: "Groenten:\n{vegetables}", Language.ENGLISH: "Vegetables:\n{vegetables}"},
 }
 
 
@@ -82,6 +87,13 @@ class Translator:
     def kind(self, kind: MealKind) -> str:
         """Get a translation for a meal kind in the configured language"""
         return kinds[kind][self.language]
+
+    def table_headers(self) -> list[str]:
+        """Get a translation for the headers in the menu table"""
+        if self.language == Language.DUTCH:
+            return ["Type", "Soort", "Naam", "Prijs"]
+
+        return ["Type", "Kind", "Name", "Price"]
 
     def type(self, type_: MealType) -> str:
         """Get a translation for a type in the configured language"""
