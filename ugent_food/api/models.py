@@ -1,27 +1,12 @@
 from dataclasses import dataclass, field
-
-__all__ = ["Menu"]
-
-from enum import Enum
+from datetime import date
 from typing import Optional
 
+from ugent_food.api.enums import MealKind, MealType
+from ugent_food.cli.config import Config
+from ugent_food.i18n import Message
 
-class MealKind(str, Enum):
-    """Enum for the different kinds of meals"""
-
-    FISH = "fish"
-    MEAT = "meat"
-    SOUP = "soup"
-    VEGAN = "vegan"
-    VEGETARIAN = "vegetarian"
-
-
-class MealType(str, Enum):
-    """Enum for the different categories of meals"""
-
-    COLD = "cold"
-    MAIN = "main"
-    SIDE = "side"
+__all__ = ["Menu"]
 
 
 @dataclass
@@ -48,12 +33,16 @@ class Menu:
         default_factory=lambda: [MealKind.MEAT, MealKind.FISH, MealKind.VEGETARIAN, MealKind.VEGAN, MealKind.SOUP],
     )
 
-    def __str__(self) -> str:
+    def to_string(self, config: Config, day: date) -> str:
         """String representation of a menu: table of all dishes"""
         aggregated = []
 
         if not self.open:
-            aggregated.append("The restaurants are closed.")
+            aggregated.append(config.translator.message(Message.RESTO_CLOSED, day=day))
+
+        # Remove hidden meals
+        acceptable_kinds = list(filter(lambda x: x not in config.hidden, self._main_kinds_order))
+        self.meals = list(filter(lambda _meal: _meal.kind in acceptable_kinds, self.meals))
 
         if self.message:
             aggregated.append(self.message)

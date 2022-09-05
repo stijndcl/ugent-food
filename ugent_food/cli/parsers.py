@@ -70,7 +70,7 @@ def parse_date_argument(argument: Optional[str] = None) -> Optional[date]:
             return _forward_date_to(weekdays[weekday], today)
 
     # Try various datetime formats
-    formats = ["%d/%m", "%d/%m/%y", "%d/%m/%Y"]
+    formats = ["%d/%m", "%d/%m/%y", "%d/%m/%Y", "%Y-%m-%d", "%y-%m-%d", "%m-%d"]
     for _format in formats:
         try:
             dt_instance = datetime.strptime(argument, _format)

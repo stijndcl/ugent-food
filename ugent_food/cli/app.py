@@ -9,11 +9,15 @@ from ugent_food.exceptions import APIException, NoMenuFound
 from ugent_food.version import __version__
 
 from .async_command import async_command
-from .config import CONFIG_CHOICES
+from .config import CONFIG_CHOICES, Config
 from .default_group import DefaultGroup
 from .parsers import parse_date_argument
 
 __all__ = ["cli"]
+
+
+# Load config by default because every command needs it
+user_config = Config.load()
 
 
 @click.group(cls=DefaultGroup, default="menu", invoke_without_command=True)
@@ -86,7 +90,7 @@ async def menu_fetcher(day: Optional[str] = None):
     async with ClientSession() as session:
         try:
             menu = await fetch_menu(session, date_instance, "nl")
-            click.echo(str(menu))
+            click.echo(menu.to_string(user_config, date_instance))
         except APIException as e:
             click.echo(e)
         except NoMenuFound:

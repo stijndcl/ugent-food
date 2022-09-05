@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import json
 import sys
-from dataclasses import Field, dataclass, field, fields
+from dataclasses import MISSING, Field, dataclass, field, fields
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import click
 
-__all__ = ["CONFIG_CHOICES"]
+__all__ = ["CONFIG_CHOICES", "Config"]
 
 from dacite import from_dict
 
@@ -40,6 +40,14 @@ def load_config_file() -> dict:
 class Config:
     """Class to load & store settings to configure the tool"""
 
+    hidden: list[str] = field(  # type: ignore # Mypy doesn't enjoy this one
+        default_factory=list,
+        metadata={
+            "description": "A list of meal kinds that should be hidden when fetching menus."
+            "\nThis can be useful for vegetarians and vegans who don't care about the meat dishes."
+        },
+    )
+
     language: str = field(  # type: ignore # Mypy doesn't enjoy this one
         default=CONFIG_DEFAULTS["language"],
         metadata={
@@ -63,19 +71,12 @@ class Config:
 
     def __post_init__(self):
         """Initialize fields that depend on the config settings"""
-        self.language = self.language.lower()
-
         # Find the Language instance that matches the setting
-        for language in Language:
-            if language.value == self.language:
-                self._language = language
-                break
-
-        # Nothing found
-        if self._language is None:
-            raise ValueError(f"Invalid language configuration: {self.language}")
-
+        self._language = Language.from_str(self.language)
         self.translator = Translator(language=self._language)
+
+        # Make sure "hidden" values are lowercase
+        self.hidden = list(map(str.lower, self.hidden))
 
     @classmethod
     def _find_field(cls, name: str) -> Optional[Field]:
@@ -95,6 +96,18 @@ class Config:
                 break
 
         return matched_field
+
+    @classmethod
+    def _get_field_default(cls, field_: Field) -> Any:
+        """Get the default value for a field"""
+        if field_.default is not None:
+            return field_.default
+
+        # If there is no default value, check if there's a factory instead
+        if field_.default_factory != MISSING and callable(field_.default_factory):
+            return field_.default_factory()
+
+        return MISSING
 
     @classmethod
     def load(cls) -> Config:
@@ -121,7 +134,7 @@ class Config:
 
         # Value is not allowed for this field
         allowed_values = matched_field.metadata.get("allowed", [])
-        if value not in allowed_values:
+        if allowed_values and value not in allowed_values:
             click.echo(
                 f'Illegal value "{value}" for setting "{matched_field.name}".\n'
                 f"Accepted values are: {', '.join(allowed_values)}"
