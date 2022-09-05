@@ -1,6 +1,17 @@
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+files = [
+    "ugent_food/**/*.py"
+]
+
 [tool.poetry]
 name = "ugent-food"
-version = "0.2.0"
+version = "1.0.0"
 description = "Command-line tool to get the current menu for Ghent University restaurants"
 authors = ["stijndcl"]
 license = "MIT"
