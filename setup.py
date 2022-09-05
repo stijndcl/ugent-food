@@ -7,7 +7,7 @@ here = pathlib.Path(__file__).parent
 # Get the long description from the README file
 long_description = (here / "README.md").read_text()
 
-dependencies = ["aiohttp==3.8.1", "dacite==1.6.0", "tabulate==0.8.9"]
+dependencies = ["aiohttp==3.8.1", "click==8.1.3", "dacite==1.6.0", "tabulate==0.8.9"]
 
 dev_dependencies = [
     "mypy==0.942",
