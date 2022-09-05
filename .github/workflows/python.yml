@@ -65,4 +65,4 @@ jobs:
           poetry env use ${{ matrix.python }}
           poetry install
       - name: Run Mypy
-        run: poetry run mypy
+        run: poetry run mypy --version
