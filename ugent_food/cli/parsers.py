@@ -122,6 +122,8 @@ def parse_arg_to_type(value: str, type_: Type[ARG_TYPES]) -> ARG_TYPES:
 
         raise ValueError
 
+    print(type_, type_ in (list, list[str]))
+
     # For lists: split the list & strip whitespace off
     # This allows adding spaces after arguments if you want to
     if type_ in (

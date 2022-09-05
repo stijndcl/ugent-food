@@ -42,7 +42,7 @@ async def cli(ctx: click.Context, version: bool = False):
         ctx.exit(0)
 
 
-@cli.group(invoke_without_command=True)
+@cli.group(cls=DefaultGroup, default="ls", invoke_without_command=True)
 @click.pass_context
 def config(ctx: click.Context):
     """Read or modify settings.
@@ -68,6 +68,7 @@ def config_reset(name: str):
 @click.argument("value")
 def config_set(name: str, value: str):
     """Change the value of setting NAME to VALUE."""
+    Config.set(name, value)
 
 
 @cli.command(name="menu")

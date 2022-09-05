@@ -37,7 +37,16 @@ class Menu:
 
     def _get_meals_by_type(self, meal_type: MealType) -> list[Meal]:
         """Get all meals of a given type"""
-        return list(filter(lambda _meal: _meal.type == meal_type, self.meals))
+        meals = []
+        type_meals = list(filter(lambda x: x.type == meal_type, self.meals))
+
+        # Group by kind, in order
+        for kind in self._main_kinds_order:
+            for meal in type_meals:
+                if meal.kind == kind:
+                    meals.append(meal)
+
+        return meals
 
     def to_string(self, config: Config, day: date) -> str:
         """String representation of a menu: table of all dishes"""
