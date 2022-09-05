@@ -11,28 +11,13 @@ jobs:
         python: [ 3.9, "3.10" ]
     steps:
       - uses: actions/checkout@v2
+      - name: Install Poetry
+        run: pipx install poetry
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
-      - name: Install Poetry
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry-1.1.13-0
-      - uses: snok/install-poetry@v1
-        with:
-          version: 1.1.13
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache the dependencies
-        id: cache-deps
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          cache: 'poetry'
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
@@ -46,28 +31,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install Poetry
+        run: pipx install poetry
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
-      - name: Install Poetry
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry-1.1.13-0
-      - uses: snok/install-poetry@v1
-        with:
-          version: 1.1.13
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache the dependencies
-        id: cache-deps
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          cache: 'poetry'
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
@@ -83,28 +53,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install Poetry
+        run: pipx install poetry
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
-      - name: Install Poetry
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry-1.1.13-0
-      - uses: snok/install-poetry@v1
-        with:
-          version: 1.1.13
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache the dependencies
-        id: cache-deps
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          cache: 'poetry'
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
