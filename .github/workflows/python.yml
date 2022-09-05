@@ -73,7 +73,7 @@ jobs:
         if: steps.cache-deps.outputs.cache-hit != 'true'
       - run: poetry install --no-interaction
       - name: Run Flake8
-        run: flake8
+        run: poetry run flake8
   Typing:
     needs: [Dependencies]
     runs-on: ubuntu-latest
@@ -110,4 +110,4 @@ jobs:
         if: steps.cache-deps.outputs.cache-hit != 'true'
       - run: poetry install --no-interaction
       - name: Run Mypy
-        run: mypy ugent_food
+        run: poetry run mypy ugent_food
