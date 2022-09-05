@@ -40,7 +40,7 @@ def load_config_file() -> dict:
 class Config:
     """Class to load & store settings to configure the tool"""
 
-    language: str = field(
+    language: str = field(  # type: ignore # Mypy doesn't enjoy this one
         default=CONFIG_DEFAULTS["language"],
         metadata={
             "description": "The language used to fetch the menus in. "
@@ -49,7 +49,7 @@ class Config:
             "allowed": ["en", "nl"],
         },
     )
-    skip_weekends: bool = field(
+    skip_weekends: bool = field(  # type: ignore # Mypy doesn't enjoy this one
         default=CONFIG_DEFAULTS["skip_weekends"],
         metadata={
             "description": "Whether to automatically skip weekends when fetching menus. "
