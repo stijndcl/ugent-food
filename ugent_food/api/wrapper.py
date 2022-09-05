@@ -1,11 +1,12 @@
 from datetime import date
+from enum import Enum
 from http import HTTPStatus
 
 from aiohttp import ClientSession
-from dacite import from_dict
+from dacite import Config, from_dict
 
 from ugent_food.api.models import Menu
-from ugent_food.exceptions import APIException
+from ugent_food.exceptions import APIException, NoMenuFound
 from ugent_food.version import __version__
 
 __all__ = ["fetch_menu"]
@@ -17,8 +18,11 @@ async def fetch_menu(client_session: ClientSession, day: date, language: str) ->
     """Get the menu for a given day"""
     endpoint = f"https://hydra.ugent.be/api/2.0/resto/menu/{language}/{day.year}/{day.month}/{day.day}.json"
     async with client_session.get(endpoint, headers=headers) as response:
+        if response.status == HTTPStatus.NOT_FOUND:
+            raise NoMenuFound
+
         if response.status != HTTPStatus.OK:
             raise APIException(response.status)
 
         data = await response.json()
-        return from_dict(Menu, data)
+        return from_dict(Menu, data, config=Config(cast=[Enum]))

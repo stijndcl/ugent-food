@@ -6,8 +6,8 @@ import click
 __all__ = ["CONFIG_CHOICES"]
 
 CONFIG_PATH = Path.home() / ".ugent_food"
-CONFIG_CHOICES = ["language", "skip_weekends"]
-CONFIG_DEFAULTS = {"language": "en", "skip_weekends": True}
+CONFIG_CHOICES = ["hidden", "language", "skip_weekends"]
+CONFIG_DEFAULTS = {"hidden": [], "language": "en", "skip_weekends": True}
 
 
 def ensure_config_file():

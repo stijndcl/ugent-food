@@ -7,7 +7,7 @@ here = pathlib.Path(__file__).parent
 # Get the long description from the README file
 long_description = (here / "README.md").read_text()
 
-dependencies = ["aiohttp==3.8.1", "dacite==1.6.0", "requests==2.27.1", "tabulate==0.8.9"]
+dependencies = ["aiohttp==3.8.1", "dacite==1.6.0", "tabulate==0.8.9"]
 
 dev_dependencies = [
     "mypy==0.942",
@@ -54,6 +54,9 @@ setup(
     keywords="python, food, api, wrapper, zeus, hydra, ugent, ghent, university, resto, restaurants, menu",
     packages=[
         "ugent_food",
+        "ugent_food.api",
+        "ugent_food.cli",
+        "ugent_food.exceptions",
     ],
     python_requires=">=3.9",
     install_requires=dependencies,

@@ -1,16 +1,22 @@
+import sys
+from typing import Optional
+
 import click
 from aiohttp import ClientSession
 
 from ugent_food.api.wrapper import fetch_menu
-from ugent_food.utils.decorators.cli import async_command
+from ugent_food.exceptions import APIException, NoMenuFound
 from ugent_food.version import __version__
 
+from .async_command import async_command
 from .config import CONFIG_CHOICES
+from .default_group import DefaultGroup
+from .parsers import parse_date_argument
 
 __all__ = ["cli"]
 
 
-@click.group(invoke_without_command=True)
+@click.group(cls=DefaultGroup, default="menu", invoke_without_command=True)
 @click.option(
     "-V", "--version", is_flag=True, show_default=False, default=False, help="Show the version number and exit."
 )
@@ -71,14 +77,28 @@ def config_set(name: str, value: str):
 
 
 @cli.command(name="menu")
-@click.argument("day")
+@click.argument("day", required=False)
 @async_command
-async def menu_fetcher(day: str):
+async def menu_fetcher(day: Optional[str] = None):
     """Fetch the menu for DAY.
 
     :param day: The day to fetch the menu for.
                 This supports DD/MM(/YYYY) formats, as well as Dutch & English weekdays and relative offsets.
                 If no value is provided, the menu for today is fetched instead.
     """
+    # Try to parse the date arg
+    date_instance = parse_date_argument(day, skip_weekends=True)
+
+    # Parsing failed
+    if date_instance is None:
+        click.echo(f'Unable to parse argument "{day}".')
+        sys.exit(1)
+
     async with ClientSession() as session:
-        await fetch_menu(session)
+        try:
+            menu = await fetch_menu(session, date_instance, "nl")
+            click.echo(str(menu))
+        except APIException as e:
+            click.echo(e)
+        except NoMenuFound:
+            click.echo(f"No menu found for {date_instance}.")
