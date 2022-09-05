@@ -1,10 +1,13 @@
 from datetime import date, datetime, timedelta
-from typing import Optional
+from typing import Optional, Type, TypeVar
 
-__all__ = ["parse_date_argument"]
+__all__ = ["parse_date_argument", "parse_arg_to_type"]
 
 
-def _forward_to(weekday: int, date_instance: date) -> date:
+T = TypeVar("T")
+
+
+def _forward_date_to(weekday: int, date_instance: date) -> date:
     """Forward a datetime.date until the next occurrence of [weekday]
 
     This always goes at least one day in the future, so if [date_instance]
@@ -67,7 +70,7 @@ def parse_date_argument(argument: Optional[str] = None) -> Optional[date]:
 
     for weekday in weekdays:
         if weekday.startswith(argument):
-            return _forward_to(weekdays[weekday], today)
+            return _forward_date_to(weekdays[weekday], today)
 
     # Try various datetime formats
     formats = ["%d/%m", "%d/%m/%y", "%d/%m/%Y"]
@@ -95,3 +98,34 @@ def parse_date_argument(argument: Optional[str] = None) -> Optional[date]:
 
     # Can't be parsed
     return None
+
+
+def parse_arg_to_type(value: str, type_: Type[T]) -> T:
+    """Try to parse an argument into type [type]"""
+    if type_ == str:
+        return value
+
+    if type_ == int:
+        return int(value)
+
+    value = value.lower()
+
+    if type_ == bool:
+        true_values = ["1", "true", "t", "yes", "y"]
+        false_values = ["0", "false", "f", "no", "n"]
+
+        if value in true_values:
+            return True
+
+        if value in false_values:
+            return False
+
+        raise ValueError
+
+    # For lists: split the list & strip whitespace off
+    # This allows adding spaces after arguments if you want to
+    if type_ == list:
+        return list(map(str.strip, value.split(",")))
+
+    # Could not be parsed
+    raise ValueError
