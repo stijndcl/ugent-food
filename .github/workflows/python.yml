@@ -10,18 +10,18 @@ jobs:
       matrix:
         python: [ 3.9, "3.10" ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Poetry
-        run: pipx install poetry
+        run: pipx install poetry==1.1.13
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
           cache: 'poetry'
       - name: Install dependencies
-        run: poetry install --no-interaction --no-root
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-      - run: poetry install --no-interaction
+        run: |
+          poetry env use ${{ matrix.python-version }}
+          poetry install
   Linting:
     needs: [Dependencies]
     runs-on: ubuntu-latest
@@ -30,18 +30,18 @@ jobs:
         python: [ 3.9, "3.10" ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Poetry
-        run: pipx install poetry
+        run: pipx install poetry==1.1.13
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
           cache: 'poetry'
       - name: Install dependencies
-        run: poetry install --no-interaction --no-root
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-      - run: poetry install --no-interaction
+        run: |
+          poetry env use ${{ matrix.python-version }}
+          poetry install
       - name: Run Flake8
         run: poetry run flake8
   Typing:
@@ -52,17 +52,17 @@ jobs:
         python: [ 3.9, "3.10" ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Poetry
-        run: pipx install poetry
+        run: pipx install poetry==1.1.13
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
           cache: 'poetry'
       - name: Install dependencies
-        run: poetry install --no-interaction --no-root
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-      - run: poetry install --no-interaction
+        run: |
+          poetry env use ${{ matrix.python-version }}
+          poetry install
       - name: Run Mypy
-        run: poetry run mypy ugent_food
+        run: poetry run mypy
