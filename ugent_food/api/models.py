@@ -8,7 +8,7 @@ from ugent_food.api.enums import MealKind, MealType
 from ugent_food.cli.config import Config
 from ugent_food.i18n import Message
 
-__all__ = ["Menu"]
+__all__ = ["Menu", "Sandwich"]
 
 
 @dataclass
@@ -80,7 +80,7 @@ class Menu:
 
         # Create table
         aggregated.append(config.translator.message(Message.MENU_FOR, day=day_str, weekday=weekday))
-        aggregated.append("\n" + tabulate(table_data, headers=config.translator.table_headers()))
+        aggregated.append("\n" + tabulate(table_data, headers=config.translator.menu_table_headers()))
 
         if self.vegetables:
             vegetables_str = "\n".join(map(lambda x: f"- {x}", self.vegetables))
@@ -90,3 +90,21 @@ class Menu:
             aggregated.append("\n" + config.translator.message(Message.EXTRA_MESSAGE, extra=self.message))
 
         return "\n".join(aggregated)
+
+
+@dataclass
+class Sandwich:
+    """A sandwich available in the restaurants"""
+
+    name: str
+    ingredients: list[str]
+    price_small: str
+    price_medium: str
+
+    def __post_init__(self):
+        """Add a € symbol to the prices"""
+        if self.price_small:
+            self.price_small = "€ " + self.price_small
+
+        if self.price_medium:
+            self.price_medium = "€ " + self.price_medium

@@ -4,7 +4,7 @@ from typing import Optional
 import click
 from aiohttp import ClientSession
 
-from ugent_food.api.wrapper import fetch_menu
+from ugent_food.api.wrapper import fetch_menu, fetch_sandwiches
 from ugent_food.exceptions import APIException, NoMenuFound
 from ugent_food.version import __version__
 
@@ -12,6 +12,7 @@ from .async_command import async_command
 from .config import CONFIG_CHOICES, Config
 from .default_group import DefaultGroup
 from .parsers import parse_date_argument
+from .tables import sandwich_table
 
 __all__ = ["cli"]
 
@@ -95,5 +96,23 @@ async def menu_fetcher(day: Optional[str] = None):
             click.echo(menu.to_string(user_config, date_instance))
         except APIException as e:
             click.echo(e)
+            sys.exit(1)
         except NoMenuFound:
             click.echo(f"No menu found for {date_instance} (parsed from {day}).")
+            sys.exit(1)
+
+
+@cli.command()
+@async_command
+async def sandwiches():
+    """Show the list of sandwiches available in restaurants.
+
+    Note: this endpoint is only available in Dutch.
+    """
+    async with ClientSession() as session:
+        try:
+            sandwich_list = await fetch_sandwiches(session)
+            click.echo(sandwich_table(sandwich_list, user_config.translator))
+        except APIException as e:
+            click.echo(e)
+            sys.exit(1)

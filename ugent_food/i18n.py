@@ -88,12 +88,19 @@ class Translator:
         """Get a translation for a meal kind in the configured language"""
         return kinds[kind][self.language]
 
-    def table_headers(self) -> list[str]:
+    def menu_table_headers(self) -> list[str]:
         """Get a translation for the headers in the menu table"""
         if self.language == Language.DUTCH:
             return ["Type", "Soort", "Naam", "Prijs"]
 
         return ["Type", "Kind", "Name", "Price"]
+
+    def sandwich_table_headers(self) -> list[str]:
+        """Get a translation for the headers in the sandwich table"""
+        if self.language == Language.DUTCH:
+            return ["Naam", "Ingrediënten", "Prijs (klein)", "Prijs (medium)"]
+
+        return ["Name", "Ingredients", "Price (small)", "Price (medium)"]
 
     def type(self, type_: MealType) -> str:
         """Get a translation for a type in the configured language"""
