@@ -62,9 +62,7 @@ jobs:
           cache: 'poetry'
       - name: Install dependencies
         run: |
-          poetry run python --version
           poetry env use ${{ matrix.python }}
           poetry install
-          poetry run python --version
       - name: Run Mypy
         run: poetry run mypy --python-version=${{ matrix.python }}
