@@ -11,7 +11,8 @@ s [Hydra API](https://github.com/ZeusWPI/hydra/blob/master/api-resto-02.md).
 
 ## Installation
 
-It's recommended to install the tool using [``pipx``](https://pypa.github.io/pipx/#install-pipx) to allow running the command from anywhere on your PC, without having to invoke it using `python3 -m ugent_food`.
+It's recommended to install the tool using [``pipx``](https://pypa.github.io/pipx/#install-pipx) to allow running the
+command from anywhere on your PC, without having to invoke it using `python3 -m ugent_food`.
 
 ```sh
 $ pipx install ugent-food
@@ -88,7 +89,8 @@ $ food config ls
 
 Note that `boolean` arguments can be supplied as any of `[true, false, t, f, 1, 0]`.
 
-| Name          | Description                                                                                                                                                                                                                        | Type (choices)                      | Default |
-|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|---------|
-| language      | The language used to fetch the menus in.                                                                                                                                                                                           | String ("en" 🇬🇧 , "nl" 🇧🇪/🇳🇱) | "en"    |
-| skip_weekends | Whether to automatically skip weekends when fetching menus. This defaults to true because the restaurants aren't usually open during weekends. For example: using the tool on a Saturday will show the menu for the coming Monday. | Boolean                             | True    |
+| Name          | Description                                                                                                                                                                                                                        | Type (choices)                                                 | Default |
+|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|---------|
+| hidden        | A list of meal kinds that should be hidden when fetching menus. This can be useful for vegetarians and vegans who don't care about the meat dishes.                                                                                | List\[String\] ("fish", "meat", "soup", "vegan", "vegetarian") | []      |
+| language      | The language used to fetch the menus in.                                                                                                                                                                                           | String ("en" 🇬🇧 , "nl" 🇧🇪/🇳🇱)                            | "en"    |
+| skip_weekends | Whether to automatically skip weekends when fetching menus. This defaults to true because the restaurants aren't usually open during weekends. For example: using the tool on a Saturday will show the menu for the coming Monday. | Boolean                                                        | True    |

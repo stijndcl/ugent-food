@@ -1,7 +1,7 @@
-from datetime import datetime
+from .base import UGentFoodException
+
+__all__ = ["NoMenuFound"]
 
 
-class NoMenuFoundException(ValueError):
+class NoMenuFound(UGentFoodException):
     """Exception raised when no menu could be found"""
-    def __init__(self, date: datetime):
-        super().__init__(f"No menu could be found for {date.day:02d}/{date.month:02d}/{date.year}.")

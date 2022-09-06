@@ -1,7 +1,4 @@
-import sys
-
-import ugent_food
-
+from ugent_food import main
 
 if __name__ == "__main__":
-    ugent_food.main(sys.argv[1:])
+    main()
