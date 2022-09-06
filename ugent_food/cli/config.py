@@ -127,8 +127,9 @@ class Config:
             click.echo(f"Unknown setting: {name}.")
             sys.exit(1)
 
+        field_type = matched_field.metadata.get("comparable_type", matched_field.type)
+
         try:
-            field_type = matched_field.metadata.get("comparable_type", matched_field.type)
             converted_value = parse_arg_to_type(value, field_type)
         except ValueError:
             click.echo(f'Unable to parse "{value}" to type {field_type}.')
