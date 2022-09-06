@@ -54,7 +54,7 @@ def config(ctx: click.Context):
 @config.command(name="ls")
 def config_ls():
     """Display a list of settings, along with their current and accepted values."""
-    click.echo("hi")
+    user_config.ls()
 
 
 @config.command(name="reset")

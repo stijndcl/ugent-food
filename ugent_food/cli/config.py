@@ -2,18 +2,19 @@ from __future__ import annotations
 
 import json
 import sys
+import textwrap
 from dataclasses import MISSING, Field, dataclass, field, fields
 from pathlib import Path
 from typing import Any, Optional
 
 import click
-
-__all__ = ["CONFIG_CHOICES", "Config"]
-
 from dacite import from_dict
+from tabulate import tabulate
 
 from ugent_food.cli.parsers import parse_arg_to_type
 from ugent_food.i18n import Language, Translator
+
+__all__ = ["CONFIG_CHOICES", "Config"]
 
 CONFIG_PATH = Path.home() / ".ugent_food"
 CONFIG_CHOICES = ["hidden", "language", "skip_weekends"]
@@ -101,7 +102,7 @@ class Config:
     @classmethod
     def _get_field_default(cls, field_: Field) -> Any:
         """Get the default value for a field"""
-        if field_.default is not None:
+        if field_.default != MISSING:
             return field_.default
 
         # If there is no default value, check if there's a factory instead
@@ -109,6 +110,27 @@ class Config:
             return field_.default_factory()
 
         return MISSING
+
+    def ls(self):
+        """Print the user's configuration settings."""
+        table_data = []
+        for _field in fields(self):
+            if not _field.init:
+                continue
+
+            description = "\n".join(textwrap.wrap(_field.metadata.get("description")))
+            default = self._get_field_default(_field)
+
+            table_data.append(
+                [
+                    _field.name,
+                    description,
+                    default if default != MISSING else "",
+                    getattr(self, _field.name),
+                ]
+            )
+
+        click.echo(tabulate(table_data, headers=["name", "description", "default", "value"]))
 
     @classmethod
     def load(cls) -> Config:
