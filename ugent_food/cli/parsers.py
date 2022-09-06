@@ -97,7 +97,7 @@ def parse_date_argument(argument: Optional[str] = None) -> Optional[date]:
     return None
 
 
-ARG_TYPES = Union[str, int, bool, list, list[str]]
+ARG_TYPES = Union[str, int, bool, list]
 
 
 def parse_arg_to_type(value: str, type_: Type[ARG_TYPES]) -> ARG_TYPES:
@@ -122,14 +122,9 @@ def parse_arg_to_type(value: str, type_: Type[ARG_TYPES]) -> ARG_TYPES:
 
         raise ValueError
 
-    print(type_, type_ in (list, list[str]))
-
     # For lists: split the list & strip whitespace off
     # This allows adding spaces after arguments if you want to
-    if type_ in (
-        list,
-        list[str],
-    ):
+    if type_ == list:
         return list(map(str.strip, value.split(",")))
 
     # Could not be parsed

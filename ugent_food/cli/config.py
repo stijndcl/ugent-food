@@ -46,6 +46,7 @@ class Config:
             "description": "A list of meal kinds that should be hidden when fetching menus."
             "\nThis can be useful for vegetarians and vegans who don't care about the meat dishes."
         },
+        comparable_type=list,
     )
 
     language: str = field(  # type: ignore # Mypy doesn't enjoy this one
@@ -127,9 +128,10 @@ class Config:
             sys.exit(1)
 
         try:
-            converted_value = parse_arg_to_type(value, matched_field.type)
+            field_type = matched_field.metadata.get("comparable_type", matched_field.type)
+            converted_value = parse_arg_to_type(value, field_type)
         except ValueError:
-            click.echo(f'Unable to parse "{value}" to type {matched_field.type}.')
+            click.echo(f'Unable to parse "{value}" to type {field_type}.')
             sys.exit(1)
 
         # Value is not allowed for this field
