@@ -14,7 +14,7 @@ jobs:
       - name: Install Poetry
         run: pipx install poetry==1.1.13
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
           cache: 'poetry'
@@ -34,7 +34,7 @@ jobs:
       - name: Install Poetry
         run: pipx install poetry==1.1.13
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
           cache: 'poetry'
@@ -42,10 +42,8 @@ jobs:
         run: |
           poetry env use ${{ matrix.python }}
           poetry install
-      - name: Activate Virtual Environment
-        run: source .venv/bin/activate
       - name: Run Flake8
-        run: python -m flake8
+        run: poetry run flake8
   Typing:
     needs: [Dependencies]
     runs-on: ubuntu-latest
@@ -58,7 +56,7 @@ jobs:
       - name: Install Poetry
         run: pipx install poetry==1.1.13
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
           cache: 'poetry'
@@ -66,7 +64,5 @@ jobs:
         run: |
           poetry env use ${{ matrix.python }}
           poetry install
-      - name: Activate Virtual Environment
-        run: source .venv/bin/activate
       - name: Run Mypy
-        run: python -m mypy --python-version=${{ matrix.python }}
+        run: poetry run mypy --python-version=${{ matrix.python }}
