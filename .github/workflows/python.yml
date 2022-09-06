@@ -64,5 +64,9 @@ jobs:
         run: |
           poetry env use ${{ matrix.python }}
           poetry install
+      - name: Print Python versions
+        run: |
+          python --version
+          poetry run python --version
       - name: Run Mypy
-        run: poetry run mypy --version
+        run: poetry run mypy --python-version=${{ matrix.python }}
