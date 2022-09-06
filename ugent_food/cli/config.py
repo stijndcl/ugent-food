@@ -44,9 +44,9 @@ class Config:
         default_factory=list,
         metadata={
             "description": "A list of meal kinds that should be hidden when fetching menus."
-            "\nThis can be useful for vegetarians and vegans who don't care about the meat dishes."
+            "\nThis can be useful for vegetarians and vegans who don't care about the meat dishes.",
+            "comparable_type": list,
         },
-        comparable_type=list,
     )
 
     language: str = field(  # type: ignore # Mypy doesn't enjoy this one
