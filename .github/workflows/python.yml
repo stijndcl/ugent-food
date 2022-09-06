@@ -42,6 +42,8 @@ jobs:
         run: |
           poetry env use ${{ matrix.python }}
           poetry install
+      - name: Activate Virtual Environment
+        run: source .venv/bin/activate
       - name: Run Flake8
         run: python -m flake8
   Typing:
@@ -64,5 +66,7 @@ jobs:
         run: |
           poetry env use ${{ matrix.python }}
           poetry install
+      - name: Activate Virtual Environment
+        run: source .venv/bin/activate
       - name: Run Mypy
         run: python -m mypy --python-version=${{ matrix.python }}
