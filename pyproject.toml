@@ -11,10 +11,33 @@ files = [
 
 [tool.poetry]
 name = "ugent-food"
-version = "1.0.0"
+version = "1.0.1"
 description = "Command-line tool to get the current menu for Ghent University restaurants"
-authors = ["stijndcl"]
 license = "MIT"
+authors = ["stijndcl"]
+readme = "README.md"
+homepage = "https://github.com/stijndcl/ugent-food"
+repository = "https://github.com/stijndcl/ugent-food"
+keywords = [
+    "python, food, api, wrapper, zeus, hydra, ugent, ghent, university, resto, restaurants, menu"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Dutch",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+    ]
+packages = [
+    {include = "ugent_food"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -36,6 +59,12 @@ mypy = "^0.971"
 pre-commit = "^2.20.0"
 types-tabulate = "^0.8.11"
 
+[tool.poetry.scripts]
+ugent-food = "ugent_food:main"
+
+[tool.poetry.urls]
+issues = "https://github.com/stijndcl/ugent-food/issues"
+
 [build-system]
-requires = ["poetry-core>=1.0.0", "setuptools>=62", "wheel"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
