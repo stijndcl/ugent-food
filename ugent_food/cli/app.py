@@ -61,6 +61,7 @@ def config_ls():
 @click.argument("name", type=click.Choice(CONFIG_CHOICES))
 def config_reset(name: str):
     """Reset setting NAME back to its default value."""
+    Config.reset(name)
 
 
 @config.command(name="set")

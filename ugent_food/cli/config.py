@@ -118,6 +118,24 @@ class Config:
         return from_dict(cls, content)
 
     @classmethod
+    def reset(cls, name: str):
+        """Reset a setting back to its default value"""
+        matched_field = Config._find_field(name)
+
+        # Found no field
+        if matched_field is None:
+            click.echo(f"Unknown setting: {name}.")
+            sys.exit(1)
+
+        config = load_config_file()
+        config[matched_field.name] = CONFIG_DEFAULTS[matched_field.name]
+
+        with CONFIG_PATH.open("w", encoding="utf-8") as fp:
+            json.dump(config, fp)
+
+        click.echo(f'Restored setting "{matched_field.name}" back to "{CONFIG_DEFAULTS[matched_field.name]}".')
+
+    @classmethod
     def set(cls, name: str, value: str):
         """Change a setting"""
         matched_field = Config._find_field(name)
