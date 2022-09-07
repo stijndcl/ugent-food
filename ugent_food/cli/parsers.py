@@ -17,12 +17,16 @@ def _forward_date_to(weekday: int, date_instance: date) -> date:
     return date_instance
 
 
-def parse_date_argument(argument: Optional[str] = None) -> Optional[date]:
+def parse_date_argument(argument: Optional[str] = None, *, skip_weekends: bool = True) -> Optional[date]:
     """Try to parse an argument into a date"""
     today = date.today()
 
     # Default to today
     if argument is None:
+        # If weekends should be skipped & today is a weekend, skip to monday
+        if skip_weekends and today.weekday() > 4:
+            today += timedelta(days=7 - today.weekday())
+
         return today
 
     argument = argument.lower()

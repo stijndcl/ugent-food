@@ -83,7 +83,7 @@ async def menu_fetcher(day: Optional[str] = None):
     If no value is provided, the menu for today is fetched instead.
     """
     # Try to parse the date arg
-    date_instance = parse_date_argument(day)
+    date_instance = parse_date_argument(day, skip_weekends=user_config.skip_weekends)
 
     # Parsing failed
     if date_instance is None:

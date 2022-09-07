@@ -62,7 +62,8 @@ class Config:
     skip_weekends: bool = field(  # type: ignore # Mypy doesn't enjoy this one
         default=CONFIG_DEFAULTS["skip_weekends"],
         metadata={
-            "description": "Whether to automatically skip weekends when fetching menus. "
+            "description": "Whether to automatically skip weekends when fetching menus "
+            "without an explicit day argument. "
             "This defaults to True because the restaurants aren't usually open during weekends."
             "\nUsing the tool on a Saturday (with this setting set to True) will show "
             "the menu for the coming Monday instead."
