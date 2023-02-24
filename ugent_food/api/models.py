@@ -20,6 +20,11 @@ class Meal:
     price: str
     type: MealType
 
+    def __post_init__(self):
+        # Price prefix missing
+        if self.price and self.price[0].isnumeric():
+            self.price = f"€ {self.price}"
+
 
 @dataclass
 class Menu:

@@ -92,7 +92,7 @@ async def menu_fetcher(day: Optional[str] = None):
 
     async with ClientSession() as session:
         try:
-            menu = await fetch_menu(session, date_instance, "nl")
+            menu = await fetch_menu(session, date_instance, user_config.language)
             click.echo(menu.to_string(user_config, date_instance))
         except APIException as e:
             click.echo(e)

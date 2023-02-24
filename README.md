@@ -4,21 +4,36 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ugent_food)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/stijndcl/ugent-food/python.yml?branch=master)
 
-Command-line tool to get the current menu for Ghent University restaurants.
+Command-line tool & Python package to get the current menu for Ghent University restaurants.
 
 This application was made using [Zeus WPI](https://github.com/ZeusWPI)'
 s [Hydra API](https://github.com/ZeusWPI/hydra/blob/master/api-resto-02.md).
 
 ## Installation
 
+### As Python dependency
+
+```shell
+# Pip
+$ pip3 install ugent-food
+
+# Poetry
+$ poetry add ugent-food
+
+# Conda
+$ conda install ugent-food
+```
+
+### As CLI Tool
+
 It's recommended to install the tool using [``pipx``](https://pypa.github.io/pipx/#install-pipx) to allow running the
-command from anywhere on your PC, without having to invoke it using `python3 -m ugent_food`.
+command from anywhere on your PC, without having to invoke it using `python3 -m`.
 
 ```sh
 $ pipx install ugent-food
 ```
 
-If you don't want to use `pipx`, it can also be installed using `pip`:
+Alternatively, it can also be installed using `pip`:
 
 ```sh
 $ pip3 install --user ugent-food
@@ -44,6 +59,10 @@ You can now simply use `food` to run the tool.
 
 _To keep the examples short, they use `food` instead of `python3 -m ugent_food` to invoke the tool._
 
+### Python
+
+
+
 ### Menus
 
 To get the menu for a given day, use the ``menu`` command. By default, not passing any arguments will fetch today's
@@ -51,6 +70,23 @@ menu:
 
 ```sh
 $ food
+```
+
+```
+Menu for Friday 24/02/2023:
+
+Type         Kind    Name                                  Price
+-----------  ------  ------------------------------------  -------
+Main course  Meat    Spaghetti bolognese                   € 4,85
+Main course  Meat    Chicken schnitzel with pineapple      € 5,15
+Main course  Meat    Discover extra dishes in the counter
+Main course  Vegan   Penne tomatino basilico               € 4,25
+Side dish    Soup    Carrot soup: 350 ml                   € 1,00
+Side dish    Soup    Carrot soup: 700 ml                   € 1,50
+
+Vegetables:
+- vegan: Spanish vegetables
+- vegan: Crudités
 ```
 
 For convenience, passing this command is **optional**. You can immediately pass a day (or subcommand) instead of having
