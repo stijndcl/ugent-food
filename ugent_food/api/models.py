@@ -1,12 +1,16 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from tabulate import tabulate
 
 from ugent_food.api.enums import MealKind, MealType
-from ugent_food.cli.config import Config
 from ugent_food.i18n import Message
+
+if TYPE_CHECKING:
+    from ugent_food.cli.config import Config
 
 __all__ = ["Menu", "Sandwich"]
 
@@ -40,7 +44,7 @@ class Menu:
         default_factory=lambda: [MealKind.MEAT, MealKind.FISH, MealKind.VEGETARIAN, MealKind.VEGAN, MealKind.SOUP],
     )
 
-    def _get_meals_by_type(self, meal_type: MealType) -> list[Meal]:
+    def get_meals_by_type(self, meal_type: MealType) -> list[Meal]:
         """Get all meals of a given type"""
         meals = []
         type_meals = list(filter(lambda x: x.type == meal_type, self.meals))
@@ -67,7 +71,7 @@ class Menu:
         self.meals = list(filter(lambda _meal: _meal.kind in acceptable_kinds, self.meals))
 
         for _type in [MealType.MAIN, MealType.SIDE, MealType.COLD]:
-            meals = self._get_meals_by_type(_type)
+            meals = self.get_meals_by_type(_type)
 
             for meal in meals:
                 meal_data = [

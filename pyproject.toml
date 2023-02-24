@@ -65,6 +65,10 @@ ugent-food = "ugent_food:main"
 [tool.poetry.urls]
 issues = "https://github.com/stijndcl/ugent-food/issues"
 
+[tool.poetry.group.tests.dependencies]
+pytest = "^7.2.1"
+coverage = {extras = ["toml"], version = "^7.2.0"}
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
