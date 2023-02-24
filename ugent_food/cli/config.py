@@ -55,7 +55,7 @@ class Config:
         metadata={
             "description": "The language used to fetch the menus in. "
             'Supported values are "en" (English) and "nl" (Dutch).'
-            "\nNote that not every endpoint is available in every language.",
+            "\nNote that not all endpoints support multiple languages.",
             "allowed": ["en", "nl"],
         },
     )
