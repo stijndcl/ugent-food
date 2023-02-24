@@ -59,10 +59,6 @@ You can now simply use `food` to run the tool.
 
 _To keep the examples short, they use `food` instead of `python3 -m ugent_food` to invoke the tool._
 
-### Python
-
-
-
 ### Menus
 
 To get the menu for a given day, use the ``menu`` command. By default, not passing any arguments will fetch today's
