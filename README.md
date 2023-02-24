@@ -3,6 +3,7 @@
 ![PyPI](https://img.shields.io/pypi/v/ugent_food)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ugent_food)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/stijndcl/ugent-food/python.yml?branch=master)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Command-line tool & Python package to get the current menu for Ghent University restaurants.
 

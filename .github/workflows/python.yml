@@ -22,12 +22,9 @@ jobs:
         run: |
           poetry env use ${{ matrix.python }}
           poetry install
-  Linting:
-    needs: [Dependencies]
+  Formatting:
+    needs: [ Dependencies ]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python: [ 3.9, "3.10", "3.11" ]
 
     steps:
       - uses: actions/checkout@v3
@@ -36,16 +33,35 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python }}
+          python-version: 3.9
           cache: 'poetry'
       - name: Install dependencies
         run: |
-          poetry env use ${{ matrix.python }}
+          poetry env use 3.9
+          poetry install
+      - name: Run Black
+        run: poetry run black --check .
+  Linting:
+    needs: [ Dependencies ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Poetry
+        run: pipx install poetry==1.3.2
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+          cache: 'poetry'
+      - name: Install dependencies
+        run: |
+          poetry env use 3.9
           poetry install
       - name: Run Flake8
         run: poetry run flake8
   Typing:
-    needs: [Dependencies]
+    needs: [ Dependencies ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -66,3 +82,25 @@ jobs:
           poetry install
       - name: Run Mypy
         run: poetry run mypy --python-version=${{ matrix.python }}
+  Tests:
+    needs: [ Dependencies ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [ 3.9, "3.10", "3.11" ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Poetry
+        run: pipx install poetry==1.3.2
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+          cache: 'poetry'
+      - name: Install dependencies
+        run: |
+          poetry env use ${{ matrix.python }}
+          poetry install
+      - name: Run Pytest
+        run: poetry run pytest
